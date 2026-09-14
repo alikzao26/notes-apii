@@ -1,45 +1,45 @@
 # 📝 Notes API
 
-A RESTful API service for managing notes with tags, built with Flask and SQLAlchemy.  
-Supports full CRUD, search, tag filtering, pagination, and Docker deployment.
+REST API сервис для управления заметками с тегами, построен на Flask и SQLAlchemy.  
+Поддерживает полный CRUD, поиск, фильтрацию по тегам, пагинацию и развёртывание через Docker.
 
 ---
 
-## Tech Stack
+## Стек технологий
 
 - **Python 3.11** + **Flask 3.0**
-- **SQLAlchemy** ORM + **SQLite** (dev) / **PostgreSQL** (prod)
-- **pytest** for testing
-- **Docker** + **docker-compose** for containerization
-- Deployed on **[Render](https://render.com)**
+- **SQLAlchemy** ORM + **SQLite** (разработка) / **PostgreSQL** (продакшн)
+- **pytest** для тестирования
+- **Docker** + **docker-compose** для контейнеризации
+- Развёрнуто на **[Render](https://render.com)** / **[Railway](https://railway.app)**
 
 ---
 
-## Project Structure
+## Структура проекта
 
 ```
 notes-api/
 ├── app/
-│   ├── __init__.py      # app factory
-│   ├── database.py      # SQLAlchemy instance
-│   ├── models.py        # Note, Tag models
-│   └── routes.py        # all API endpoints
+│   ├── __init__.py      # фабрика приложения
+│   ├── database.py      # экземпляр SQLAlchemy
+│   ├── models.py        # модели Note, Tag
+│   └── routes.py        # все эндпоинты API
 ├── tests/
-│   ├── conftest.py      # pytest fixtures
-│   └── test_api.py      # unit tests (25 tests)
+│   ├── conftest.py      # фикстуры pytest
+│   └── test_api.py      # unit-тесты (21 тест)
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
-└── run.py               # app entry point
+└── run.py               # точка входа приложения
 ```
 
 ---
 
-## Local Setup
+## Локальная установка
 
-### 1. Clone and create virtual environment
+### 1. Клонируй репозиторий и создай виртуальное окружение
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/notes-api.git
@@ -48,148 +48,148 @@ python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 ```
 
-### 2. Install dependencies
+### 2. Установи зависимости
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure environment
+### 3. Настрой переменные окружения
 
 ```bash
 cp .env.example .env
-# Edit .env — set SECRET_KEY at minimum
+# Отредактируй .env — минимум установи SECRET_KEY
 ```
 
-### 4. Run the development server
+### 4. Запусти сервер разработки
 
 ```bash
 python run.py
 ```
 
-The API will be available at `http://localhost:5000`.
+API будет доступен по адресу `http://localhost:5000`.
 
 ---
 
-## Running with Docker
+## Запуск через Docker
 
 ```bash
-# Build and start both web + postgres
+# Собрать и запустить web + postgres
 docker-compose up --build
 
-# Run in background
+# Запустить в фоновом режиме
 docker-compose up -d --build
 
-# Stop
+# Остановить
 docker-compose down
 ```
 
 ---
 
-## Running Tests
+## Запуск тестов
 
 ```bash
-# Run all tests
+# Запустить все тесты
 pytest
 
-# With coverage report
+# С отчётом о покрытии
 pytest --cov=app --cov-report=term-missing
 
-# Verbose output
+# С подробным выводом
 pytest -v
 ```
 
 ---
 
-## API Reference
+## Справочник API
 
-Base URL (local): `http://localhost:5000/api`  
-Base URL (production): `https://notes-api.onrender.com/api`
+Базовый URL (локально): `http://localhost:5000/api`  
+Базовый URL (продакшн): `https://notes-api.onrender.com/api`
 
-### Endpoints
+### Эндпоинты
 
-| Method   | URL                | Description                        |
-|----------|--------------------|------------------------------------|
-| `GET`    | `/health`          | Health check                       |
-| `GET`    | `/notes`           | List all notes (search, filter, paginate) |
-| `GET`    | `/notes/<id>`      | Get a single note                  |
-| `POST`   | `/notes`           | Create a new note                  |
-| `PUT`    | `/notes/<id>`      | Update a note                      |
-| `DELETE` | `/notes/<id>`      | Delete a note                      |
-| `GET`    | `/tags`            | List all tags                      |
+| Метод    | URL                | Описание                               |
+|----------|--------------------|-----------------------------------------|
+| `GET`    | `/health`          | Проверка здоровья сервиса               |
+| `GET`    | `/notes`           | Получить список заметок (поиск, фильтр, пагинация) |
+| `GET`    | `/notes/<id>`      | Получить одну заметку                   |
+| `POST`   | `/notes`           | Создать новую заметку                   |
+| `PUT`    | `/notes/<id>`      | Обновить заметку                        |
+| `DELETE` | `/notes/<id>`      | Удалить заметку                         |
+| `GET`    | `/tags`            | Получить список всех тегов              |
 
-### Query Parameters for `GET /notes`
+### Параметры запроса для `GET /notes`
 
-| Parameter  | Type    | Default      | Description                            |
-|------------|---------|--------------|----------------------------------------|
-| `q`        | string  | —            | Search in title and content            |
-| `tag`      | string  | —            | Filter by tag name                     |
-| `sort`     | string  | `created_at` | Sort field: `created_at`, `updated_at`, `title` |
-| `order`    | string  | `desc`       | `asc` or `desc`                        |
-| `page`     | integer | `1`          | Page number                            |
-| `per_page` | integer | `10`         | Items per page (max 100)               |
+| Параметр   | Тип     | По умолчанию | Описание                                    |
+|------------|---------|--------------|---------------------------------------------|
+| `q`        | string  | —            | Поиск в заголовке и содержимом              |
+| `tag`      | string  | —            | Фильтр по имени тега                        |
+| `sort`     | string  | `created_at` | Поле сортировки: `created_at`, `updated_at`, `title` |
+| `order`    | string  | `desc`       | `asc` или `desc`                            |
+| `page`     | integer | `1`          | Номер страницы                              |
+| `per_page` | integer | `10`         | Элементов на странице (максимум 100)        |
 
 ---
 
-## curl Examples
+## Примеры curl-запросов
 
-### Health check
+### Проверка здоровья
 ```bash
 curl http://localhost:5000/api/health
 ```
 
-### Get all notes
+### Получить все заметки
 ```bash
 curl http://localhost:5000/api/notes
 ```
 
-### Get all notes (with pagination)
+### Получить заметки с пагинацией
 ```bash
 curl "http://localhost:5000/api/notes?page=1&per_page=5"
 ```
 
-### Search notes
+### Поиск заметок
 ```bash
 curl "http://localhost:5000/api/notes?q=flask&sort=title&order=asc"
 ```
 
-### Filter notes by tag
+### Фильтр заметок по тегу
 ```bash
 curl "http://localhost:5000/api/notes?tag=python"
 ```
 
-### Get a single note
+### Получить одну заметку
 ```bash
 curl http://localhost:5000/api/notes/1
 ```
 
-### Create a note
+### Создать заметку
 ```bash
 curl -X POST http://localhost:5000/api/notes \
   -H "Content-Type: application/json" \
-  -d '{"title": "My first note", "content": "Hello, Notes API!", "tags": ["python", "flask"]}'
+  -d '{"title": "Моя первая заметка", "content": "Привет, Notes API!", "tags": ["python", "flask"]}'
 ```
 
-### Update a note
+### Обновить заметку
 ```bash
 curl -X PUT http://localhost:5000/api/notes/1 \
   -H "Content-Type: application/json" \
-  -d '{"title": "Updated title", "tags": ["updated"]}'
+  -d '{"title": "Обновлённый заголовок", "tags": ["обновлено"]}'
 ```
 
-### Delete a note
+### Удалить заметку
 ```bash
 curl -X DELETE http://localhost:5000/api/notes/1
 ```
 
-### List all tags
+### Получить список всех тегов
 ```bash
 curl http://localhost:5000/api/tags
 ```
 
 ---
 
-## Example Response
+## Пример ответа
 
 `GET /api/notes`
 
@@ -198,8 +198,8 @@ curl http://localhost:5000/api/tags
   "notes": [
     {
       "id": 1,
-      "title": "My first note",
-      "content": "Hello, Notes API!",
+      "title": "Моя первая заметка",
+      "content": "Привет, Notes API!",
       "tags": [
         {"id": 1, "name": "python"},
         {"id": 2, "name": "flask"}
@@ -217,29 +217,50 @@ curl http://localhost:5000/api/tags
 
 ---
 
-## Deploy to Render
+## Развёртывание на Render
 
-1. Push this repo to GitHub.
-2. Go to [render.com](https://render.com) → **New Web Service** → connect your repo.
-3. Set these values:
+1. Загрузи репозиторий на GitHub.
+2. Зайди на [render.com](https://render.com) → **New Web Service** → подключи свой репозиторий.
+3. Установи следующие значения:
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `gunicorn run:app`
-4. Add environment variables in the Render dashboard:
-   - `SECRET_KEY` — any long random string
-   - `DATABASE_URL` — Render PostgreSQL connection string (add a PostgreSQL service)
-5. Deploy. Your API will be live at `https://<your-app-name>.onrender.com`.
+4. Добавь переменные окружения в панели управления Render:
+   - `SECRET_KEY` — любая длинная случайная строка
+   - `DATABASE_URL` — строка подключения PostgreSQL от Render (добавь PostgreSQL сервис)
+5. Разверни. Твой API будет доступен по адресу `https://<имя-твоего-приложения>.onrender.com`.
 
 ---
 
-## Environment Variables
+## Развёртывание на Railway
 
-| Variable        | Required | Description                          |
-|-----------------|----------|--------------------------------------|
-| `SECRET_KEY`    | Yes      | Flask secret key                     |
-| `DATABASE_URL`  | No       | DB connection string (default SQLite)|
+1. Загрузи репозиторий на GitHub.
+2. Зайди на [railway.app](https://railway.app) → войди через GitHub.
+3. **New Project** → **Deploy from GitHub repo** → выбери `notes-api`.
+4. Railway автоматически определит Python проект.
+5. **Settings** → **Networking** → **Generate Domain**.
+6. Добавь переменную окружения:
+   - `SECRET_KEY` — любая случайная строка
+7. Разверни. Получишь ссылку типа `notes-api-production.up.railway.app`.
 
 ---
 
-## License
+## Переменные окружения
+
+| Переменная      | Обязательна | Описание                                  |
+|-----------------|-------------|-------------------------------------------|
+| `SECRET_KEY`    | Да          | Секретный ключ Flask                      |
+| `DATABASE_URL`  | Нет         | Строка подключения к БД (по умолчанию SQLite) |
+
+---
+
+## Лицензия
 
 MIT
+
+---
+
+## Автор
+Заболоцкая Алеся Олеговна Ммпми-24
+Разработано в рамках учебной технологической практики  
+Направление: 01.03.02 Прикладная математика и информатика  
+СВФУ им. М.К. Аммосова, 2025
